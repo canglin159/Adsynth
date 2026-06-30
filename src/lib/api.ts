@@ -26,6 +26,9 @@ import {
   getProjectById,
   getAllUsers,
   getSubscriptionSummary,
+  getAllCreativeRequests,
+  getDashboardMetrics,
+  createContactMessage,
 } from "~/db";
 import type { User, CreativeRequest, Project } from "~/db/schema";
 
@@ -36,7 +39,7 @@ import type { User, CreativeRequest, Project } from "~/db/schema";
 export const getCurrentUserFromDb = createServerFn({ method: "GET" })
   .validator((userId: string) => userId)
   .handler(async (ctx) => {
-    const user = getUserById(ctx.data);
+    const user = await getUserById(ctx.data);
     return user ?? null;
   });
 
@@ -156,4 +159,107 @@ export const adminListUsers = createServerFn({ method: "GET" })
 export const adminGetSummary = createServerFn({ method: "GET" })
   .handler(async () => {
     return getSubscriptionSummary();
+  });
+
+export const adminGetDashboard = createServerFn({ method: "GET" })
+  .handler(async () => {
+    return getDashboardMetrics();
+  });
+
+export const adminListRequests = createServerFn({ method: "GET" })
+  .handler(async () => {
+    return getAllCreativeRequests();
+  });
+
+// ---------------------------------------------------------------------------
+// Stripe Checkout
+// ---------------------------------------------------------------------------
+
+export const createSubscriptionCheckout = createServerFn({ method: "POST" })
+  .validator(
+    (data: {
+      tier: "starter" | "growth" | "agency";
+      customerEmail?: string;
+      userId?: string;
+      successUrl?: string;
+      cancelUrl?: string;
+    }) => data
+  )
+  .handler(async (ctx) => {
+    const { createCheckoutSession, getOrCreateCustomer } = await import(
+      "./stripe"
+    );
+    const { APP_URL } = await import("./env");
+
+    const { tier, customerEmail, userId, successUrl, cancelUrl } = ctx.data;
+
+    // Create or get Stripe customer
+    const customer = await getOrCreateCustomer(
+      customerEmail ?? "customer@example.com",
+      userId ?? undefined
+    );
+
+    // Create checkout session
+    const result = await createCheckoutSession({
+      customerId: customer.id,
+      tierKey: tier,
+      successUrl: successUrl ?? `${APP_URL}/dashboard?checkout=success`,
+      cancelUrl: cancelUrl ?? `${APP_URL}/pricing?checkout=cancelled`,
+    });
+
+    return { url: result.url, sessionId: result.sessionId };
+  });
+
+// ---------------------------------------------------------------------------
+// Contact Form
+// ---------------------------------------------------------------------------
+
+export const submitContactForm = createServerFn({ method: "POST" })
+  .validator(
+    (data: {
+      name: string;
+      email: string;
+      business_name?: string;
+      message: string;
+    }) => data
+  )
+  .handler(async (ctx) => {
+    const result = await createContactMessage(ctx.data);
+    return { success: true, id: result.id };
+  });
+
+// ---------------------------------------------------------------------------
+// AI Creative Generation
+// ---------------------------------------------------------------------------
+
+export const generateAdCreative = createServerFn({ method: "POST" })
+  .validator((requestId: string) => requestId)
+  .handler(async (ctx) => {
+    const request = await getCreativeRequestById(ctx.data);
+    if (!request) {
+      throw new Error(`Creative request not found: ${ctx.data}`);
+    }
+
+    // Import OpenAI module dynamically to avoid client build issues
+    const { generateCreative } = await import("./openai");
+    const { generateVariations } = await import("./openai");
+
+    const brief = {
+      businessType: request.business_type,
+      businessName: request.business_name,
+      adPlatform: request.ad_platform,
+      adType: request.ad_type,
+      description: request.description,
+    };
+
+    const generated = await generateCreative(brief);
+
+    // Save the AI draft as JSON string
+    const draftJson = JSON.stringify(generated);
+    await updateCreativeRequest(ctx.data, {
+      status: "ai_draft",
+      ai_draft: draftJson,
+    });
+
+    return generated;
   });

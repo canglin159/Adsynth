@@ -44,6 +44,18 @@ CREATE TABLE IF NOT EXISTS creative_requests (
 );
 
 -- Projects table
+-- Contact messages (website inquiries / support)
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id              TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  name            TEXT NOT NULL,
+  email           TEXT NOT NULL,
+  business_name   TEXT DEFAULT '',
+  message         TEXT NOT NULL,
+  source          TEXT NOT NULL DEFAULT 'website',
+  read            INTEGER NOT NULL DEFAULT 0,
+  created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS projects (
   id              TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
   user_id         TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -82,6 +94,17 @@ export interface CreativeRequest {
   final_delivery: string;
   created_at: string;
   completed_at: string | null;
+}
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  business_name: string;
+  message: string;
+  source: string;
+  read: number;
+  created_at: string;
 }
 
 export interface Project {

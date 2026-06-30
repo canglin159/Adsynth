@@ -63,19 +63,19 @@ export const SUBSCRIPTION_TIERS = {
     name: "Starter",
     price: 19900, // cents ($199)
     creativesPerMonth: 8,
-    stripePriceId: "", // ⚠️ Set after creating prices in Stripe dashboard
+    stripePriceId: "price_1To6n1Cqqj5hki96m9oRnTpq",
   },
   growth: {
     name: "Growth",
     price: 49900, // cents ($499)
     creativesPerMonth: 25,
-    stripePriceId: "",
+    stripePriceId: "price_1To6pkCqqj5hki96YESr2hAF",
   },
   agency: {
     name: "Agency",
     price: 99900, // cents ($999)
     creativesPerMonth: -1, // unlimited (fair use)
-    stripePriceId: "",
+    stripePriceId: "price_1To6qSCqqj5hki96TK2ASsAT",
   },
 } as const;
 

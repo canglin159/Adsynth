@@ -14,26 +14,26 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        title: "AdSynth — AI-Powered Ad Creatives That Convert. On Autopilot.",
+        title: "AdSynth — AI Ad Creatives for Local Businesses | Facebook, Instagram & Google Ads",
       },
       {
         name: "description",
         content:
-          "Get premium AI-generated ad creatives for Facebook, Instagram, and Google Display. Fast, affordable, and optimized for conversion. No agency needed.",
+          "Get premium, conversion-optimized AI ad creatives for your local business. Fast, affordable Facebook, Instagram, and Google Display ads delivered monthly. No agency needed.",
       },
-      { name: "og:title", content: "AdSynth — AI-Powered Ad Creatives" },
+      { name: "og:title", content: "AdSynth — AI Ad Creatives for Local Businesses" },
       {
         name: "og:description",
         content:
-          "Premium AI-generated ad creatives for local businesses. Subscribe and get conversion-optimized ads delivered monthly.",
+          "Get premium, conversion-optimized AI ad creatives for your local business. Facebook, Instagram, and Google ads delivered monthly.",
       },
       { name: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "AdSynth — AI-Powered Ad Creatives" },
+      { name: "twitter:title", content: "AdSynth — AI Ad Creatives for Local Businesses" },
       {
         name: "twitter:description",
         content:
-          "Get premium AI-generated ad creatives for Facebook, Instagram, and Google Display. Subscribe and get conversion-optimized ads delivered monthly.",
+          "Get premium, conversion-optimized AI ad creatives for your local business. Facebook, Instagram, and Google ads delivered monthly.",
       },
     ],
     links: [

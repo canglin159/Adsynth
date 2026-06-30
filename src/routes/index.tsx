@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { readFile } from "node:fs/promises";
 import { useEffect, useState, useCallback, type ReactNode } from "react";
@@ -75,8 +75,24 @@ function Home() {
   useScrollReveal();
   const { dark, toggle } = useDarkMode();
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": businessName,
+    "url": "https://adsynth.ctonew.app/",
+    "description": "AI-powered ad creative agency for local businesses. Fast, affordable, and optimized for conversion.",
+    "brand": {
+      "@type": "Brand",
+      "name": "AdSynth"
+    }
+  };
+
   return (
     <div className="relative overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       {/* ── Navbar ─────────────────────────────────────────────────────────── */}
       <Navbar dark={dark} onToggleDark={toggle} onNav={scrollTo} />
 
@@ -456,10 +472,10 @@ function HowItWorks() {
 // ─── Ad Examples ─────────────────────────────────────────────────────────────
 function AdExamples() {
   const industries = [
-    { name: "HVAC", color: "from-cyan-500 to-blue-600" },
-    { name: "Dental", color: "from-teal-500 to-emerald-600" },
+    { name: "HVAC", color: "from-cyan-500 to-blue-600", slug: "hvac" },
+    { name: "Dental", color: "from-teal-500 to-emerald-600", slug: "dental" },
     { name: "Restaurant", color: "from-orange-500 to-red-600" },
-    { name: "Landscaping", color: "from-green-500 to-lime-600" },
+    { name: "Landscaping", color: "from-green-500 to-lime-600", slug: "landscaping" },
     { name: "Med Spa", color: "from-pink-500 to-rose-600" },
     { name: "Real Estate", color: "from-violet-500 to-purple-600" },
   ];
@@ -487,9 +503,10 @@ function AdExamples() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {industries.map((ind, i) => (
-            <div
+            <Link
               key={i}
-              className="fade-in-scale group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-xl hover:shadow-brand-500/10 dark:border-gray-800 dark:bg-gray-900"
+              to={ind.slug ? ("/industries/" + ind.slug) : undefined}
+              className={`fade-in-scale group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-xl hover:shadow-brand-500/10 dark:border-gray-800 dark:bg-gray-900 ${!ind.slug ? "pointer-events-none" : ""}`}
             >
               {/* Card preview */}
               <div className={`flex h-48 items-center justify-center bg-gradient-to-br ${ind.color}`}>
@@ -511,7 +528,7 @@ function AdExamples() {
                   Conversion-optimized ads with seasonal promotions and targeted copy.
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

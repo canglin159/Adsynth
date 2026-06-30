@@ -9,38 +9,435 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as LocationsPortlandRouteImport } from './routes/locations/portland'
+import { Route as LocationsMiamiRouteImport } from './routes/locations/miami'
+import { Route as LocationsDenverRouteImport } from './routes/locations/denver'
+import { Route as LocationsAustinRouteImport } from './routes/locations/austin'
+import { Route as IndustriesRestaurantRouteImport } from './routes/industries/restaurant'
+import { Route as IndustriesRealEstateRouteImport } from './routes/industries/real-estate'
+import { Route as IndustriesPlumbingRouteImport } from './routes/industries/plumbing'
+import { Route as IndustriesMedSpaRouteImport } from './routes/industries/med-spa'
+import { Route as IndustriesLandscapingRouteImport } from './routes/industries/landscaping'
+import { Route as IndustriesHvacRouteImport } from './routes/industries/hvac'
+import { Route as IndustriesDentalRouteImport } from './routes/industries/dental'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardProjectsRouteImport } from './routes/dashboard/projects'
+import { Route as DashboardCreativesRouteImport } from './routes/dashboard/creatives'
+import { Route as BlogWhyLocalBusinessesSwitchingToAiRouteImport } from './routes/blog/why-local-businesses-switching-to-ai'
+import { Route as BlogTop5AdStrategiesHvacRouteImport } from './routes/blog/top-5-ad-strategies-hvac'
+import { Route as BlogHowAiChangingAdvertisingRouteImport } from './routes/blog/how-ai-changing-advertising'
+import { Route as ApiWebhookRouteImport } from './routes/api/webhook'
+import { Route as ApiContactRouteImport } from './routes/api/contact'
+import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
+import { Route as AdminSubscriptionsRouteImport } from './routes/admin/subscriptions'
+import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as AdminRequestsRouteImport } from './routes/admin/requests'
+import { Route as AdminCustomersRouteImport } from './routes/admin/customers'
+import { Route as DashboardRequestsNewRouteImport } from './routes/dashboard/requests/new'
 
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const LocationsPortlandRoute = LocationsPortlandRouteImport.update({
+  id: '/locations/portland',
+  path: '/locations/portland',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsMiamiRoute = LocationsMiamiRouteImport.update({
+  id: '/locations/miami',
+  path: '/locations/miami',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsDenverRoute = LocationsDenverRouteImport.update({
+  id: '/locations/denver',
+  path: '/locations/denver',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsAustinRoute = LocationsAustinRouteImport.update({
+  id: '/locations/austin',
+  path: '/locations/austin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesRestaurantRoute = IndustriesRestaurantRouteImport.update({
+  id: '/industries/restaurant',
+  path: '/industries/restaurant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesRealEstateRoute = IndustriesRealEstateRouteImport.update({
+  id: '/industries/real-estate',
+  path: '/industries/real-estate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesPlumbingRoute = IndustriesPlumbingRouteImport.update({
+  id: '/industries/plumbing',
+  path: '/industries/plumbing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesMedSpaRoute = IndustriesMedSpaRouteImport.update({
+  id: '/industries/med-spa',
+  path: '/industries/med-spa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesLandscapingRoute = IndustriesLandscapingRouteImport.update({
+  id: '/industries/landscaping',
+  path: '/industries/landscaping',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesHvacRoute = IndustriesHvacRouteImport.update({
+  id: '/industries/hvac',
+  path: '/industries/hvac',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesDentalRoute = IndustriesDentalRouteImport.update({
+  id: '/industries/dental',
+  path: '/industries/dental',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardProjectsRoute = DashboardProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCreativesRoute = DashboardCreativesRouteImport.update({
+  id: '/creatives',
+  path: '/creatives',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const BlogWhyLocalBusinessesSwitchingToAiRoute =
+  BlogWhyLocalBusinessesSwitchingToAiRouteImport.update({
+    id: '/blog/why-local-businesses-switching-to-ai',
+    path: '/blog/why-local-businesses-switching-to-ai',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogTop5AdStrategiesHvacRoute =
+  BlogTop5AdStrategiesHvacRouteImport.update({
+    id: '/blog/top-5-ad-strategies-hvac',
+    path: '/blog/top-5-ad-strategies-hvac',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogHowAiChangingAdvertisingRoute =
+  BlogHowAiChangingAdvertisingRouteImport.update({
+    id: '/blog/how-ai-changing-advertising',
+    path: '/blog/how-ai-changing-advertising',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiWebhookRoute = ApiWebhookRouteImport.update({
+  id: '/api/webhook',
+  path: '/api/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContactRoute = ApiContactRouteImport.update({
+  id: '/api/contact',
+  path: '/api/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
+  id: '/api/checkout',
+  path: '/api/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSubscriptionsRoute = AdminSubscriptionsRouteImport.update({
+  id: '/subscriptions',
+  path: '/subscriptions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRequestsRoute = AdminRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCustomersRoute = AdminCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const DashboardRequestsNewRoute = DashboardRequestsNewRouteImport.update({
+  id: '/requests/new',
+  path: '/requests/new',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/admin/customers': typeof AdminCustomersRoute
+  '/admin/requests': typeof AdminRequestsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/contact': typeof ApiContactRoute
+  '/api/webhook': typeof ApiWebhookRoute
+  '/blog/how-ai-changing-advertising': typeof BlogHowAiChangingAdvertisingRoute
+  '/blog/top-5-ad-strategies-hvac': typeof BlogTop5AdStrategiesHvacRoute
+  '/blog/why-local-businesses-switching-to-ai': typeof BlogWhyLocalBusinessesSwitchingToAiRoute
+  '/dashboard/creatives': typeof DashboardCreativesRoute
+  '/dashboard/projects': typeof DashboardProjectsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/industries/dental': typeof IndustriesDentalRoute
+  '/industries/hvac': typeof IndustriesHvacRoute
+  '/industries/landscaping': typeof IndustriesLandscapingRoute
+  '/industries/med-spa': typeof IndustriesMedSpaRoute
+  '/industries/plumbing': typeof IndustriesPlumbingRoute
+  '/industries/real-estate': typeof IndustriesRealEstateRoute
+  '/industries/restaurant': typeof IndustriesRestaurantRoute
+  '/locations/austin': typeof LocationsAustinRoute
+  '/locations/denver': typeof LocationsDenverRoute
+  '/locations/miami': typeof LocationsMiamiRoute
+  '/locations/portland': typeof LocationsPortlandRoute
+  '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/requests/new': typeof DashboardRequestsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/customers': typeof AdminCustomersRoute
+  '/admin/requests': typeof AdminRequestsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/contact': typeof ApiContactRoute
+  '/api/webhook': typeof ApiWebhookRoute
+  '/blog/how-ai-changing-advertising': typeof BlogHowAiChangingAdvertisingRoute
+  '/blog/top-5-ad-strategies-hvac': typeof BlogTop5AdStrategiesHvacRoute
+  '/blog/why-local-businesses-switching-to-ai': typeof BlogWhyLocalBusinessesSwitchingToAiRoute
+  '/dashboard/creatives': typeof DashboardCreativesRoute
+  '/dashboard/projects': typeof DashboardProjectsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/industries/dental': typeof IndustriesDentalRoute
+  '/industries/hvac': typeof IndustriesHvacRoute
+  '/industries/landscaping': typeof IndustriesLandscapingRoute
+  '/industries/med-spa': typeof IndustriesMedSpaRoute
+  '/industries/plumbing': typeof IndustriesPlumbingRoute
+  '/industries/real-estate': typeof IndustriesRealEstateRoute
+  '/industries/restaurant': typeof IndustriesRestaurantRoute
+  '/locations/austin': typeof LocationsAustinRoute
+  '/locations/denver': typeof LocationsDenverRoute
+  '/locations/miami': typeof LocationsMiamiRoute
+  '/locations/portland': typeof LocationsPortlandRoute
+  '/admin': typeof AdminIndexRoute
+  '/blog': typeof BlogIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/requests/new': typeof DashboardRequestsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/admin/customers': typeof AdminCustomersRoute
+  '/admin/requests': typeof AdminRequestsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/contact': typeof ApiContactRoute
+  '/api/webhook': typeof ApiWebhookRoute
+  '/blog/how-ai-changing-advertising': typeof BlogHowAiChangingAdvertisingRoute
+  '/blog/top-5-ad-strategies-hvac': typeof BlogTop5AdStrategiesHvacRoute
+  '/blog/why-local-businesses-switching-to-ai': typeof BlogWhyLocalBusinessesSwitchingToAiRoute
+  '/dashboard/creatives': typeof DashboardCreativesRoute
+  '/dashboard/projects': typeof DashboardProjectsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/industries/dental': typeof IndustriesDentalRoute
+  '/industries/hvac': typeof IndustriesHvacRoute
+  '/industries/landscaping': typeof IndustriesLandscapingRoute
+  '/industries/med-spa': typeof IndustriesMedSpaRoute
+  '/industries/plumbing': typeof IndustriesPlumbingRoute
+  '/industries/real-estate': typeof IndustriesRealEstateRoute
+  '/industries/restaurant': typeof IndustriesRestaurantRoute
+  '/locations/austin': typeof LocationsAustinRoute
+  '/locations/denver': typeof LocationsDenverRoute
+  '/locations/miami': typeof LocationsMiamiRoute
+  '/locations/portland': typeof LocationsPortlandRoute
+  '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/requests/new': typeof DashboardRequestsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/dashboard'
+    | '/admin/customers'
+    | '/admin/requests'
+    | '/admin/settings'
+    | '/admin/subscriptions'
+    | '/api/checkout'
+    | '/api/contact'
+    | '/api/webhook'
+    | '/blog/how-ai-changing-advertising'
+    | '/blog/top-5-ad-strategies-hvac'
+    | '/blog/why-local-businesses-switching-to-ai'
+    | '/dashboard/creatives'
+    | '/dashboard/projects'
+    | '/dashboard/settings'
+    | '/industries/dental'
+    | '/industries/hvac'
+    | '/industries/landscaping'
+    | '/industries/med-spa'
+    | '/industries/plumbing'
+    | '/industries/real-estate'
+    | '/industries/restaurant'
+    | '/locations/austin'
+    | '/locations/denver'
+    | '/locations/miami'
+    | '/locations/portland'
+    | '/admin/'
+    | '/blog/'
+    | '/dashboard/'
+    | '/dashboard/requests/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin/customers'
+    | '/admin/requests'
+    | '/admin/settings'
+    | '/admin/subscriptions'
+    | '/api/checkout'
+    | '/api/contact'
+    | '/api/webhook'
+    | '/blog/how-ai-changing-advertising'
+    | '/blog/top-5-ad-strategies-hvac'
+    | '/blog/why-local-businesses-switching-to-ai'
+    | '/dashboard/creatives'
+    | '/dashboard/projects'
+    | '/dashboard/settings'
+    | '/industries/dental'
+    | '/industries/hvac'
+    | '/industries/landscaping'
+    | '/industries/med-spa'
+    | '/industries/plumbing'
+    | '/industries/real-estate'
+    | '/industries/restaurant'
+    | '/locations/austin'
+    | '/locations/denver'
+    | '/locations/miami'
+    | '/locations/portland'
+    | '/admin'
+    | '/blog'
+    | '/dashboard'
+    | '/dashboard/requests/new'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/dashboard'
+    | '/admin/customers'
+    | '/admin/requests'
+    | '/admin/settings'
+    | '/admin/subscriptions'
+    | '/api/checkout'
+    | '/api/contact'
+    | '/api/webhook'
+    | '/blog/how-ai-changing-advertising'
+    | '/blog/top-5-ad-strategies-hvac'
+    | '/blog/why-local-businesses-switching-to-ai'
+    | '/dashboard/creatives'
+    | '/dashboard/projects'
+    | '/dashboard/settings'
+    | '/industries/dental'
+    | '/industries/hvac'
+    | '/industries/landscaping'
+    | '/industries/med-spa'
+    | '/industries/plumbing'
+    | '/industries/real-estate'
+    | '/industries/restaurant'
+    | '/locations/austin'
+    | '/locations/denver'
+    | '/locations/miami'
+    | '/locations/portland'
+    | '/admin/'
+    | '/blog/'
+    | '/dashboard/'
+    | '/dashboard/requests/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  DashboardRoute: typeof DashboardRouteWithChildren
+  ApiCheckoutRoute: typeof ApiCheckoutRoute
+  ApiContactRoute: typeof ApiContactRoute
+  ApiWebhookRoute: typeof ApiWebhookRoute
+  BlogHowAiChangingAdvertisingRoute: typeof BlogHowAiChangingAdvertisingRoute
+  BlogTop5AdStrategiesHvacRoute: typeof BlogTop5AdStrategiesHvacRoute
+  BlogWhyLocalBusinessesSwitchingToAiRoute: typeof BlogWhyLocalBusinessesSwitchingToAiRoute
+  IndustriesDentalRoute: typeof IndustriesDentalRoute
+  IndustriesHvacRoute: typeof IndustriesHvacRoute
+  IndustriesLandscapingRoute: typeof IndustriesLandscapingRoute
+  IndustriesMedSpaRoute: typeof IndustriesMedSpaRoute
+  IndustriesPlumbingRoute: typeof IndustriesPlumbingRoute
+  IndustriesRealEstateRoute: typeof IndustriesRealEstateRoute
+  IndustriesRestaurantRoute: typeof IndustriesRestaurantRoute
+  LocationsAustinRoute: typeof LocationsAustinRoute
+  LocationsDenverRoute: typeof LocationsDenverRoute
+  LocationsMiamiRoute: typeof LocationsMiamiRoute
+  LocationsPortlandRoute: typeof LocationsPortlandRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +445,266 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/locations/portland': {
+      id: '/locations/portland'
+      path: '/locations/portland'
+      fullPath: '/locations/portland'
+      preLoaderRoute: typeof LocationsPortlandRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations/miami': {
+      id: '/locations/miami'
+      path: '/locations/miami'
+      fullPath: '/locations/miami'
+      preLoaderRoute: typeof LocationsMiamiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations/denver': {
+      id: '/locations/denver'
+      path: '/locations/denver'
+      fullPath: '/locations/denver'
+      preLoaderRoute: typeof LocationsDenverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations/austin': {
+      id: '/locations/austin'
+      path: '/locations/austin'
+      fullPath: '/locations/austin'
+      preLoaderRoute: typeof LocationsAustinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/restaurant': {
+      id: '/industries/restaurant'
+      path: '/industries/restaurant'
+      fullPath: '/industries/restaurant'
+      preLoaderRoute: typeof IndustriesRestaurantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/real-estate': {
+      id: '/industries/real-estate'
+      path: '/industries/real-estate'
+      fullPath: '/industries/real-estate'
+      preLoaderRoute: typeof IndustriesRealEstateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/plumbing': {
+      id: '/industries/plumbing'
+      path: '/industries/plumbing'
+      fullPath: '/industries/plumbing'
+      preLoaderRoute: typeof IndustriesPlumbingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/med-spa': {
+      id: '/industries/med-spa'
+      path: '/industries/med-spa'
+      fullPath: '/industries/med-spa'
+      preLoaderRoute: typeof IndustriesMedSpaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/landscaping': {
+      id: '/industries/landscaping'
+      path: '/industries/landscaping'
+      fullPath: '/industries/landscaping'
+      preLoaderRoute: typeof IndustriesLandscapingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/hvac': {
+      id: '/industries/hvac'
+      path: '/industries/hvac'
+      fullPath: '/industries/hvac'
+      preLoaderRoute: typeof IndustriesHvacRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/dental': {
+      id: '/industries/dental'
+      path: '/industries/dental'
+      fullPath: '/industries/dental'
+      preLoaderRoute: typeof IndustriesDentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/projects': {
+      id: '/dashboard/projects'
+      path: '/projects'
+      fullPath: '/dashboard/projects'
+      preLoaderRoute: typeof DashboardProjectsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/creatives': {
+      id: '/dashboard/creatives'
+      path: '/creatives'
+      fullPath: '/dashboard/creatives'
+      preLoaderRoute: typeof DashboardCreativesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/blog/why-local-businesses-switching-to-ai': {
+      id: '/blog/why-local-businesses-switching-to-ai'
+      path: '/blog/why-local-businesses-switching-to-ai'
+      fullPath: '/blog/why-local-businesses-switching-to-ai'
+      preLoaderRoute: typeof BlogWhyLocalBusinessesSwitchingToAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/top-5-ad-strategies-hvac': {
+      id: '/blog/top-5-ad-strategies-hvac'
+      path: '/blog/top-5-ad-strategies-hvac'
+      fullPath: '/blog/top-5-ad-strategies-hvac'
+      preLoaderRoute: typeof BlogTop5AdStrategiesHvacRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/how-ai-changing-advertising': {
+      id: '/blog/how-ai-changing-advertising'
+      path: '/blog/how-ai-changing-advertising'
+      fullPath: '/blog/how-ai-changing-advertising'
+      preLoaderRoute: typeof BlogHowAiChangingAdvertisingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/webhook': {
+      id: '/api/webhook'
+      path: '/api/webhook'
+      fullPath: '/api/webhook'
+      preLoaderRoute: typeof ApiWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact': {
+      id: '/api/contact'
+      path: '/api/contact'
+      fullPath: '/api/contact'
+      preLoaderRoute: typeof ApiContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout': {
+      id: '/api/checkout'
+      path: '/api/checkout'
+      fullPath: '/api/checkout'
+      preLoaderRoute: typeof ApiCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/subscriptions': {
+      id: '/admin/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/admin/subscriptions'
+      preLoaderRoute: typeof AdminSubscriptionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/requests': {
+      id: '/admin/requests'
+      path: '/requests'
+      fullPath: '/admin/requests'
+      preLoaderRoute: typeof AdminRequestsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/customers': {
+      id: '/admin/customers'
+      path: '/customers'
+      fullPath: '/admin/customers'
+      preLoaderRoute: typeof AdminCustomersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/dashboard/requests/new': {
+      id: '/dashboard/requests/new'
+      path: '/requests/new'
+      fullPath: '/dashboard/requests/new'
+      preLoaderRoute: typeof DashboardRequestsNewRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminCustomersRoute: typeof AdminCustomersRoute
+  AdminRequestsRoute: typeof AdminRequestsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSubscriptionsRoute: typeof AdminSubscriptionsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCustomersRoute: AdminCustomersRoute,
+  AdminRequestsRoute: AdminRequestsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminSubscriptionsRoute: AdminSubscriptionsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardCreativesRoute: typeof DashboardCreativesRoute
+  DashboardProjectsRoute: typeof DashboardProjectsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardRequestsNewRoute: typeof DashboardRequestsNewRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardCreativesRoute: DashboardCreativesRoute,
+  DashboardProjectsRoute: DashboardProjectsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardRequestsNewRoute: DashboardRequestsNewRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  DashboardRoute: DashboardRouteWithChildren,
+  ApiCheckoutRoute: ApiCheckoutRoute,
+  ApiContactRoute: ApiContactRoute,
+  ApiWebhookRoute: ApiWebhookRoute,
+  BlogHowAiChangingAdvertisingRoute: BlogHowAiChangingAdvertisingRoute,
+  BlogTop5AdStrategiesHvacRoute: BlogTop5AdStrategiesHvacRoute,
+  BlogWhyLocalBusinessesSwitchingToAiRoute:
+    BlogWhyLocalBusinessesSwitchingToAiRoute,
+  IndustriesDentalRoute: IndustriesDentalRoute,
+  IndustriesHvacRoute: IndustriesHvacRoute,
+  IndustriesLandscapingRoute: IndustriesLandscapingRoute,
+  IndustriesMedSpaRoute: IndustriesMedSpaRoute,
+  IndustriesPlumbingRoute: IndustriesPlumbingRoute,
+  IndustriesRealEstateRoute: IndustriesRealEstateRoute,
+  IndustriesRestaurantRoute: IndustriesRestaurantRoute,
+  LocationsAustinRoute: LocationsAustinRoute,
+  LocationsDenverRoute: LocationsDenverRoute,
+  LocationsMiamiRoute: LocationsMiamiRoute,
+  LocationsPortlandRoute: LocationsPortlandRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
