@@ -35,6 +35,8 @@ import { Route as DashboardCreativesRouteImport } from './routes/dashboard/creat
 import { Route as BlogWhyLocalBusinessesSwitchingToAiRouteImport } from './routes/blog/why-local-businesses-switching-to-ai'
 import { Route as BlogTop5AdStrategiesHvacRouteImport } from './routes/blog/top-5-ad-strategies-hvac'
 import { Route as BlogHowAiChangingAdvertisingRouteImport } from './routes/blog/how-ai-changing-advertising'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiWebhookRouteImport } from './routes/api/webhook'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
@@ -177,6 +179,16 @@ const BlogHowAiChangingAdvertisingRoute =
     path: '/blog/how-ai-changing-advertising',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiWebhookRoute = ApiWebhookRouteImport.update({
   id: '/api/webhook',
   path: '/api/webhook',
@@ -229,6 +241,8 @@ export interface FileRoutesByFullPath {
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/contact': typeof ApiContactRoute
   '/api/webhook': typeof ApiWebhookRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/blog/how-ai-changing-advertising': typeof BlogHowAiChangingAdvertisingRoute
   '/blog/top-5-ad-strategies-hvac': typeof BlogTop5AdStrategiesHvacRoute
   '/blog/why-local-businesses-switching-to-ai': typeof BlogWhyLocalBusinessesSwitchingToAiRoute
@@ -263,6 +277,8 @@ export interface FileRoutesByTo {
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/contact': typeof ApiContactRoute
   '/api/webhook': typeof ApiWebhookRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/blog/how-ai-changing-advertising': typeof BlogHowAiChangingAdvertisingRoute
   '/blog/top-5-ad-strategies-hvac': typeof BlogTop5AdStrategiesHvacRoute
   '/blog/why-local-businesses-switching-to-ai': typeof BlogWhyLocalBusinessesSwitchingToAiRoute
@@ -300,6 +316,8 @@ export interface FileRoutesById {
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/contact': typeof ApiContactRoute
   '/api/webhook': typeof ApiWebhookRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/blog/how-ai-changing-advertising': typeof BlogHowAiChangingAdvertisingRoute
   '/blog/top-5-ad-strategies-hvac': typeof BlogTop5AdStrategiesHvacRoute
   '/blog/why-local-businesses-switching-to-ai': typeof BlogWhyLocalBusinessesSwitchingToAiRoute
@@ -338,6 +356,8 @@ export interface FileRouteTypes {
     | '/api/checkout'
     | '/api/contact'
     | '/api/webhook'
+    | '/auth/login'
+    | '/auth/register'
     | '/blog/how-ai-changing-advertising'
     | '/blog/top-5-ad-strategies-hvac'
     | '/blog/why-local-businesses-switching-to-ai'
@@ -372,6 +392,8 @@ export interface FileRouteTypes {
     | '/api/checkout'
     | '/api/contact'
     | '/api/webhook'
+    | '/auth/login'
+    | '/auth/register'
     | '/blog/how-ai-changing-advertising'
     | '/blog/top-5-ad-strategies-hvac'
     | '/blog/why-local-businesses-switching-to-ai'
@@ -408,6 +430,8 @@ export interface FileRouteTypes {
     | '/api/checkout'
     | '/api/contact'
     | '/api/webhook'
+    | '/auth/login'
+    | '/auth/register'
     | '/blog/how-ai-changing-advertising'
     | '/blog/top-5-ad-strategies-hvac'
     | '/blog/why-local-businesses-switching-to-ai'
@@ -441,6 +465,8 @@ export interface RootRouteChildren {
   ApiCheckoutRoute: typeof ApiCheckoutRoute
   ApiContactRoute: typeof ApiContactRoute
   ApiWebhookRoute: typeof ApiWebhookRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
   BlogHowAiChangingAdvertisingRoute: typeof BlogHowAiChangingAdvertisingRoute
   BlogTop5AdStrategiesHvacRoute: typeof BlogTop5AdStrategiesHvacRoute
   BlogWhyLocalBusinessesSwitchingToAiRoute: typeof BlogWhyLocalBusinessesSwitchingToAiRoute
@@ -645,6 +671,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogHowAiChangingAdvertisingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/webhook': {
       id: '/api/webhook'
       path: '/api/webhook'
@@ -749,6 +789,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCheckoutRoute: ApiCheckoutRoute,
   ApiContactRoute: ApiContactRoute,
   ApiWebhookRoute: ApiWebhookRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
   BlogHowAiChangingAdvertisingRoute: BlogHowAiChangingAdvertisingRoute,
   BlogTop5AdStrategiesHvacRoute: BlogTop5AdStrategiesHvacRoute,
   BlogWhyLocalBusinessesSwitchingToAiRoute:

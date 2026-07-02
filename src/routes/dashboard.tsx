@@ -1,9 +1,28 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useSearch } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
+import { requireAuth } from "~/lib/router-guard";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardLayout,
+  validateSearch: (search: Record<string, unknown>) => ({
+    checkout: search.checkout as string | undefined,
+  }),
+  beforeLoad: async () => {
+    return requireAuth();
+  },
 });
+
+function CheckoutSuccessBanner({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div className="fixed inset-x-0 top-0 z-50 flex items-center gap-3 bg-green-600 px-6 py-3 text-white shadow-lg">
+      <svg className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p className="flex-1 text-sm font-medium">Subscription activated! Welcome to AdSynth.</p>
+      <button onClick={onDismiss} className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 text-sm hover:bg-white/30">&times;</button>
+    </div>
+  );
+}
 
 function useDarkMode() {
   const [dark, setDark] = useState(true);
@@ -69,9 +88,20 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
 function DashboardLayout() {
   const { dark, toggle } = useDarkMode();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { checkout } = Route.useSearch();
+  const [showSuccess, setShowSuccess] = useState(checkout === "success");
+
+  useEffect(() => {
+    if (showSuccess && checkout === "success") {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("checkout");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [showSuccess, checkout]);
 
   return (
     <div className="flex min-h-dvh bg-gray-50 dark:bg-gray-950">
+      {showSuccess && <CheckoutSuccessBanner onDismiss={() => setShowSuccess(false)} />}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex flex-1 flex-col">
         {/* Mobile header */}

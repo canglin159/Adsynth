@@ -5,6 +5,30 @@ export const Route = createFileRoute("/industries/")({
   component: IndustriesHubPage,
 });
 
+function Breadcrumbs({ items }: { items: { label: string; to?: string }[] }) {
+  return (
+    <nav className="flex mb-8 text-sm font-medium text-gray-500 dark:text-gray-400" aria-label="Breadcrumb">
+      <ol className="inline-flex items-center space-x-1 md:space-x-3">
+        <li className="inline-flex items-center">
+          <Link to="/" className="hover:text-brand-500 transition-colors">Home</Link>
+        </li>
+        {items.map((item, i) => (
+          <li key={i}>
+            <div className="flex items-center">
+              <svg className="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+              {item.to ? (
+                <Link to={item.to} className="ml-1 hover:text-brand-500 transition-colors md:ml-2">{item.label}</Link>
+              ) : (
+                <span className="ml-1 md:ml-2 text-gray-400 dark:text-gray-500">{item.label}</span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 const INDUSTRIES = [
   { 
     name: "HVAC", 
@@ -76,9 +100,24 @@ function IndustriesHubPage() {
     document.title = "AdSynth | Industries We Serve - AI Ad Creatives";
   }, []);
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Industries Served by AdSynth",
+    "itemListElement": INDUSTRIES.map((ind, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "url": "https://adsynth.ctonew.app/industries/" + ind.slug,
+      "name": ind.name
+    }))
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
-      {/* Navbar Placeholder */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <nav className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
@@ -97,13 +136,16 @@ function IndustriesHubPage() {
       </nav>
 
       <header className="py-20 px-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            Marketing Solutions for <span className="text-brand-500">Every Industry</span>
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
-            AdSynth specialized AI engines understand the unique pain points, seasonal trends, and high-converting angles for your specific niche.
-          </p>
+        <div className="max-w-4xl mx-auto">
+          <Breadcrumbs items={[{ label: "Industries" }]} />
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+              Marketing Solutions for <span className="text-brand-500">Every Industry</span>
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+              AdSynth specialized AI engines understand the unique pain points, seasonal trends, and high-converting angles for your specific niche.
+            </p>
+          </div>
         </div>
       </header>
 
@@ -115,7 +157,7 @@ function IndustriesHubPage() {
               to={"/industries/" + ind.slug}
               className="group bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-gray-800 hover:border-brand-500/50 hover:shadow-xl hover:shadow-brand-500/5 transition-all flex flex-col"
             >
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${ind.color} flex items-center justify-center text-2xl mb-6 shadow-lg shadow-black/5 group-hover:scale-110 transition-transform`}>
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500/20 to-purple-500/20 dark:from-brand-500/10 dark:to-purple-500/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
                 {ind.icon}
               </div>
               <h2 className="text-2xl font-bold mb-3 group-hover:text-brand-500 transition-colors">{ind.name}</h2>
