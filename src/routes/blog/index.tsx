@@ -7,6 +7,41 @@ export const Route = createFileRoute("/blog/")({
 
 const ARTICLES = [
   {
+    id: "facebook-ads-for-hvac-guide-2026",
+    title: "Facebook Ads for HVAC Companies: The Complete Guide 2026",
+    summary: "Learn how to dominate the HVAC market with Facebook ads in 2026. Discover the best ad creatives and targeting strategies.",
+    date: "July 2, 2026",
+    category: "HVAC Marketing",
+  },
+  {
+    id: "best-ad-creatives-for-dentists",
+    title: "Best Ad Creatives for Dentists & Dental Practices",
+    summary: "Discover the highest-converting ad creatives for dental practices and how AI builds patient trust.",
+    date: "July 2, 2026",
+    category: "Dental Marketing",
+  },
+  {
+    id: "roofing-marketing-ai-leads",
+    title: "Roofing Company Marketing: Generate More Leads with AI Ads",
+    summary: "Scale your roofing business with AI-generated ad creatives for storm damage and roof replacement.",
+    date: "July 2, 2026",
+    category: "Roofing Marketing",
+  },
+  {
+    id: "instagram-ads-for-restaurants",
+    title: "Instagram Ads for Restaurants: What Actually Works",
+    summary: "Drive more diners to your table with visual-first AI-optimized Instagram ad strategies.",
+    date: "July 2, 2026",
+    category: "Restaurant Marketing",
+  },
+  {
+    id: "google-display-ads-for-plumbers",
+    title: "Google Display Ads for Plumbers: A Step-by-Step Guide",
+    summary: "Master Google Display advertising for plumbing and win more emergency repair jobs with AI banners.",
+    date: "July 2, 2026",
+    category: "Plumbing Marketing",
+  },
+  {
     id: "how-ai-changing-advertising",
     title: "How AI is Changing Advertising for Local Businesses",
     summary: "Discover how local businesses are using AI to create premium ad creatives that outperform traditional agencies.",
@@ -78,7 +113,11 @@ function BlogIndexPage() {
           {ARTICLES.map((article) => (
             <article key={article.id} className="group relative grid md:grid-cols-3 gap-8 items-start">
               <div className="md:col-span-1 aspect-video bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center text-4xl group-hover:scale-105 transition-transform">
-                 {article.id === "top-5-ad-strategies-hvac" ? "❄️" : "✨"}
+                 {article.id.includes("hvac") ? "❄️" : 
+                  article.id.includes("dentists") ? "🦷" :
+                  article.id.includes("roofing") ? "🏠" :
+                  article.id.includes("restaurants") ? "🍕" :
+                  article.id.includes("plumbers") ? "🔧" : "✨"}
               </div>
               <div className="md:col-span-2">
                 <div className="flex items-center gap-4 mb-3 text-sm text-gray-500">

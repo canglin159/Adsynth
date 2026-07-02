@@ -30,8 +30,26 @@ import {
   getDashboardMetrics,
   createContactMessage,
   getOrCreateDevUser,
+  // Referrals
+  createReferral,
+  getReferralsByReferrer,
+  getReferralByEmail,
+  updateReferralStatus,
+  getReferralStats,
+  createReferralCredit,
+  getReferralCreditsByUser,
+  getTotalReferralCredits,
+  // Free previews
+  createFreePreview,
+  updateFreePreviewCreative,
+  getFreePreviews,
+  // Brand settings
+  upsertBrandSettings,
+  getBrandSettings,
+  checkUserHasBrandSettings,
+  checkUserHasProjects,
 } from "~/db";
-import type { User, CreativeRequest, Project } from "~/db/schema";
+import type { User, CreativeRequest, Project, Referral, ReferralCredit, FreePreview, BrandSettings } from "~/db/schema";
 
 // ---------------------------------------------------------------------------
 // Auth
@@ -222,36 +240,30 @@ export const adminListRequests = createServerFn({ method: "GET" })
 // Stripe Checkout
 // ---------------------------------------------------------------------------
 
-export const createSubscriptionCheckout = createServerFn({ method: "POST" })
-  .validator(
-    (data: {
-      tier: "starter" | "growth" | "agency";
-      customerEmail?: string;
-      userId?: string;
-      successUrl?: string;
-      cancelUrl?: string;
-    }) => data
-  )
+export const createCheckoutSession = createServerFn({ method: "POST" })
+  .validator((data: {
+    tier: "starter" | "growth" | "agency";
+    customerEmail?: string;
+    userId?: string;
+    successUrl?: string;
+    cancelUrl?: string;
+  }) => data)
   .handler(async (ctx) => {
-    const { createCheckoutSession, getOrCreateCustomer } = await import(
-      "./stripe"
-    );
+    const { createCheckoutSession: createStripeSession, getOrCreateCustomer } = await import("./stripe");
     const { APP_URL } = await import("./env");
 
     const { tier, customerEmail, userId, successUrl, cancelUrl } = ctx.data;
 
-    // Create or get Stripe customer
     const customer = await getOrCreateCustomer(
       customerEmail ?? "customer@example.com",
       userId ?? undefined
     );
 
-    // Create checkout session
-    const result = await createCheckoutSession({
+    const result = await createStripeSession({
       customerId: customer.id,
       tierKey: tier,
       successUrl: successUrl ?? `${APP_URL}/dashboard?checkout=success`,
-      cancelUrl: cancelUrl ?? `${APP_URL}/pricing?checkout=cancelled`,
+      cancelUrl: cancelUrl ?? `${APP_URL}/pricing`,
     });
 
     return { url: result.url, sessionId: result.sessionId };
@@ -309,4 +321,176 @@ export const generateAdCreative = createServerFn({ method: "POST" })
     });
 
     return generated;
+  });
+
+// ---------------------------------------------------------------------------
+// Referral Program
+// ---------------------------------------------------------------------------
+
+export const createReferralLink = createServerFn({ method: "POST" })
+  .validator((data: { referrerId: string; referredEmail: string }) => data)
+  .handler(async (ctx) => {
+    // Check if referral already exists for this email
+    const existing = await getReferralByEmail(ctx.data.referredEmail);
+    if (existing) {
+      return { ok: false, error: "This email has already been referred." };
+    }
+    const referral = await createReferral(ctx.data.referrerId, ctx.data.referredEmail);
+    return { ok: true, referral };
+  });
+
+export const getMyReferrals = createServerFn({ method: "GET" })
+  .validator((userId: string) => userId)
+  .handler(async (ctx) => {
+    const referrals = await getReferralsByReferrer(ctx.data);
+    const stats = await getReferralStats(ctx.data);
+    const credits = await getTotalReferralCredits(ctx.data);
+    return { referrals, stats, credits };
+  });
+
+export const getMyReferralCredits = createServerFn({ method: "GET" })
+  .validator((userId: string) => userId)
+  .handler(async (ctx) => {
+    const credits = await getTotalReferralCredits(ctx.data);
+    return { credits };
+  });
+
+// ---------------------------------------------------------------------------
+// Free Preview / Sample Feature
+// ---------------------------------------------------------------------------
+
+export const requestFreePreview = createServerFn({ method: "POST" })
+  .validator((data: {
+    email: string;
+    business_name: string;
+    industry: string;
+    target_audience?: string;
+    ad_platform?: string;
+  }) => data)
+  .handler(async (ctx) => {
+    // Create the free preview record
+    const preview = await createFreePreview(ctx.data);
+
+    // Generate a sample creative using OpenAI
+    const { generateCreative } = await import("./openai");
+    const brief = {
+      businessType: ctx.data.industry,
+      businessName: ctx.data.business_name,
+      adPlatform: (ctx.data.ad_platform ?? "facebook") as "facebook" | "instagram" | "google",
+      adType: "image" as const,
+      description: `Ad for ${ctx.data.business_name} in the ${ctx.data.industry} industry${ctx.data.target_audience ? `. Target audience: ${ctx.data.target_audience}` : ""}. Create a compelling sample ad.`,
+      targetAudience: ctx.data.target_audience,
+    };
+    const generated = await generateCreative(brief);
+
+    // Save the generated creative
+    const creativeJson = JSON.stringify(generated);
+    await updateFreePreviewCreative(preview.id, creativeJson);
+
+    return { ok: true, previewId: preview.id, creative: generated };
+  });
+
+export const listFreePreviews = createServerFn({ method: "GET" })
+  .handler(async () => {
+    return getFreePreviews();
+  });
+
+// ---------------------------------------------------------------------------
+// Brand Settings (Onboarding)
+// ---------------------------------------------------------------------------
+
+export const saveBrandSettings = createServerFn({ method: "POST" })
+  .validator((data: {
+    user_id: string;
+    brand_colors?: string;
+    brand_tone?: string;
+    style_preferences?: string;
+    logo_url?: string;
+  }) => data)
+  .handler(async (ctx) => {
+    const settings = await upsertBrandSettings(ctx.data);
+    return { ok: true, settings };
+  });
+
+export const getMyBrandSettings = createServerFn({ method: "GET" })
+  .validator((userId: string) => userId)
+  .handler(async (ctx) => {
+    return getBrandSettings(ctx.data) ?? null;
+  });
+
+// ---------------------------------------------------------------------------
+// Onboarding Status
+// ---------------------------------------------------------------------------
+
+export const getOnboardingStatus = createServerFn({ method: "GET" })
+  .validator((userId: string) => userId)
+  .handler(async (ctx) => {
+    const [hasBrandSettings, hasProjects] = await Promise.all([
+      checkUserHasBrandSettings(ctx.data),
+      checkUserHasProjects(ctx.data),
+    ]);
+
+    let step = 1;
+    if (hasBrandSettings) step = 2;
+    if (hasProjects) step = 3;
+    // Check if user has at least one creative request
+    const requests = await getCreativeRequestsByUser(ctx.data);
+    if (requests.length > 0) step = 4;
+
+    return {
+      completed: step > 3,
+      currentStep: Math.min(step, 4),
+      totalSteps: 4,
+      hasBrandSettings,
+      hasProjects,
+      hasCreatives: requests.length > 0,
+    };
+  });
+
+// ---------------------------------------------------------------------------
+// Stripe Subscription Management
+// ---------------------------------------------------------------------------
+
+export const getSubscriptionStatus = createServerFn({ method: "GET" })
+  .validator((userId: string) => userId)
+  .handler(async (ctx) => {
+    const user = await getUserById(ctx.data);
+    if (!user) return { active: false, tier: null, currentPeriodEnd: null, cancelAtPeriodEnd: false };
+
+    if (!user.stripe_customer_id) {
+      return {
+        active: user.subscription_tier !== "free",
+        tier: user.subscription_tier === "free" ? null : user.subscription_tier,
+        currentPeriodEnd: null,
+        cancelAtPeriodEnd: false,
+      };
+    }
+
+    const { getSubscriptionStatus: getStripeStatus } = await import("./stripe");
+    return getStripeStatus(user.stripe_customer_id);
+  });
+
+export const cancelMySubscription = createServerFn({ method: "POST" })
+  .validator((userId: string) => userId)
+  .handler(async (ctx) => {
+    const user = await getUserById(ctx.data);
+    if (!user || !user.stripe_customer_id) {
+      throw new Error("No active subscription found");
+    }
+
+    const { cancelSubscription } = await import("./stripe");
+    return cancelSubscription(user.stripe_customer_id);
+  });
+
+export const createBillingPortalSession = createServerFn({ method: "POST" })
+  .validator((userId: string) => userId)
+  .handler(async (ctx) => {
+    const user = await getUserById(ctx.data);
+    if (!user || !user.stripe_customer_id) {
+      throw new Error("No Stripe customer found");
+    }
+
+    const { createPortalSession } = await import("./stripe");
+    const { APP_URL } = await import("./env");
+    return createPortalSession(user.stripe_customer_id, `${APP_URL}/dashboard/settings`);
   });

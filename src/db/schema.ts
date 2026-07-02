@@ -66,6 +66,54 @@ CREATE TABLE IF NOT EXISTS projects (
     CHECK (status IN ('active', 'archived', 'completed')),
   created_at      TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- Referral program
+CREATE TABLE IF NOT EXISTS referrals (
+  id              TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  referrer_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  referred_email  TEXT NOT NULL,
+  referred_user_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+  status          TEXT NOT NULL DEFAULT 'pending'
+    CHECK (status IN ('pending', 'signed_up', 'subscribed', 'rewarded', 'expired')),
+  reward_granted  INTEGER NOT NULL DEFAULT 0,
+  created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Referral credits (can be applied to subscriptions)
+CREATE TABLE IF NOT EXISTS referral_credits (
+  id              TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  user_id         TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  amount_cents    INTEGER NOT NULL DEFAULT 0,
+  description     TEXT NOT NULL DEFAULT '',
+  expires_at      TEXT DEFAULT NULL,
+  used            INTEGER NOT NULL DEFAULT 0,
+  created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Free previews (sample creative generation)
+CREATE TABLE IF NOT EXISTS free_previews (
+  id              TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  email           TEXT NOT NULL,
+  business_name   TEXT NOT NULL,
+  industry        TEXT NOT NULL,
+  target_audience TEXT DEFAULT '',
+  ad_platform     TEXT NOT NULL DEFAULT 'facebook',
+  generated_creative TEXT DEFAULT '',
+  subscribed      INTEGER NOT NULL DEFAULT 0,
+  created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Brand settings (onboarding flow)
+CREATE TABLE IF NOT EXISTS brand_settings (
+  id              TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  user_id         TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  brand_colors    TEXT DEFAULT '[]',
+  brand_tone      TEXT NOT NULL DEFAULT 'professional',
+  style_preferences TEXT DEFAULT '',
+  logo_url        TEXT DEFAULT '',
+  created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
 `;
 
 export interface User {
@@ -115,4 +163,47 @@ export interface Project {
   creatives_count: number;
   status: "active" | "archived" | "completed";
   created_at: string;
+}
+
+export interface Referral {
+  id: string;
+  referrer_id: string;
+  referred_email: string;
+  referred_user_id: string | null;
+  status: "pending" | "signed_up" | "subscribed" | "rewarded" | "expired";
+  reward_granted: number;
+  created_at: string;
+}
+
+export interface ReferralCredit {
+  id: string;
+  user_id: string;
+  amount_cents: number;
+  description: string;
+  expires_at: string | null;
+  used: number;
+  created_at: string;
+}
+
+export interface FreePreview {
+  id: string;
+  email: string;
+  business_name: string;
+  industry: string;
+  target_audience: string;
+  ad_platform: string;
+  generated_creative: string;
+  subscribed: number;
+  created_at: string;
+}
+
+export interface BrandSettings {
+  id: string;
+  user_id: string;
+  brand_colors: string; // JSON array
+  brand_tone: string;
+  style_preferences: string;
+  logo_url: string;
+  created_at: string;
+  updated_at: string;
 }
