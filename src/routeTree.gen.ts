@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IndustriesIndexRouteImport } from './routes/industries/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
@@ -19,6 +20,7 @@ import { Route as LocationsPortlandRouteImport } from './routes/locations/portla
 import { Route as LocationsMiamiRouteImport } from './routes/locations/miami'
 import { Route as LocationsDenverRouteImport } from './routes/locations/denver'
 import { Route as LocationsAustinRouteImport } from './routes/locations/austin'
+import { Route as IndustriesRoofingRouteImport } from './routes/industries/roofing'
 import { Route as IndustriesRestaurantRouteImport } from './routes/industries/restaurant'
 import { Route as IndustriesRealEstateRouteImport } from './routes/industries/real-estate'
 import { Route as IndustriesPlumbingRouteImport } from './routes/industries/plumbing'
@@ -26,6 +28,7 @@ import { Route as IndustriesMedSpaRouteImport } from './routes/industries/med-sp
 import { Route as IndustriesLandscapingRouteImport } from './routes/industries/landscaping'
 import { Route as IndustriesHvacRouteImport } from './routes/industries/hvac'
 import { Route as IndustriesDentalRouteImport } from './routes/industries/dental'
+import { Route as IndustriesAutoDetailingRouteImport } from './routes/industries/auto-detailing'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as DashboardProjectsRouteImport } from './routes/dashboard/projects'
 import { Route as DashboardCreativesRouteImport } from './routes/dashboard/creatives'
@@ -54,6 +57,11 @@ const AdminRoute = AdminRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
+  id: '/industries/',
+  path: '/industries/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -91,6 +99,11 @@ const LocationsAustinRoute = LocationsAustinRouteImport.update({
   path: '/locations/austin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndustriesRoofingRoute = IndustriesRoofingRouteImport.update({
+  id: '/industries/roofing',
+  path: '/industries/roofing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndustriesRestaurantRoute = IndustriesRestaurantRouteImport.update({
   id: '/industries/restaurant',
   path: '/industries/restaurant',
@@ -124,6 +137,11 @@ const IndustriesHvacRoute = IndustriesHvacRouteImport.update({
 const IndustriesDentalRoute = IndustriesDentalRouteImport.update({
   id: '/industries/dental',
   path: '/industries/dental',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesAutoDetailingRoute = IndustriesAutoDetailingRouteImport.update({
+  id: '/industries/auto-detailing',
+  path: '/industries/auto-detailing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
@@ -217,6 +235,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/creatives': typeof DashboardCreativesRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/industries/auto-detailing': typeof IndustriesAutoDetailingRoute
   '/industries/dental': typeof IndustriesDentalRoute
   '/industries/hvac': typeof IndustriesHvacRoute
   '/industries/landscaping': typeof IndustriesLandscapingRoute
@@ -224,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/industries/plumbing': typeof IndustriesPlumbingRoute
   '/industries/real-estate': typeof IndustriesRealEstateRoute
   '/industries/restaurant': typeof IndustriesRestaurantRoute
+  '/industries/roofing': typeof IndustriesRoofingRoute
   '/locations/austin': typeof LocationsAustinRoute
   '/locations/denver': typeof LocationsDenverRoute
   '/locations/miami': typeof LocationsMiamiRoute
@@ -231,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/industries/': typeof IndustriesIndexRoute
   '/dashboard/requests/new': typeof DashboardRequestsNewRoute
 }
 export interface FileRoutesByTo {
@@ -248,6 +269,7 @@ export interface FileRoutesByTo {
   '/dashboard/creatives': typeof DashboardCreativesRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/industries/auto-detailing': typeof IndustriesAutoDetailingRoute
   '/industries/dental': typeof IndustriesDentalRoute
   '/industries/hvac': typeof IndustriesHvacRoute
   '/industries/landscaping': typeof IndustriesLandscapingRoute
@@ -255,6 +277,7 @@ export interface FileRoutesByTo {
   '/industries/plumbing': typeof IndustriesPlumbingRoute
   '/industries/real-estate': typeof IndustriesRealEstateRoute
   '/industries/restaurant': typeof IndustriesRestaurantRoute
+  '/industries/roofing': typeof IndustriesRoofingRoute
   '/locations/austin': typeof LocationsAustinRoute
   '/locations/denver': typeof LocationsDenverRoute
   '/locations/miami': typeof LocationsMiamiRoute
@@ -262,6 +285,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/industries': typeof IndustriesIndexRoute
   '/dashboard/requests/new': typeof DashboardRequestsNewRoute
 }
 export interface FileRoutesById {
@@ -282,6 +306,7 @@ export interface FileRoutesById {
   '/dashboard/creatives': typeof DashboardCreativesRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/industries/auto-detailing': typeof IndustriesAutoDetailingRoute
   '/industries/dental': typeof IndustriesDentalRoute
   '/industries/hvac': typeof IndustriesHvacRoute
   '/industries/landscaping': typeof IndustriesLandscapingRoute
@@ -289,6 +314,7 @@ export interface FileRoutesById {
   '/industries/plumbing': typeof IndustriesPlumbingRoute
   '/industries/real-estate': typeof IndustriesRealEstateRoute
   '/industries/restaurant': typeof IndustriesRestaurantRoute
+  '/industries/roofing': typeof IndustriesRoofingRoute
   '/locations/austin': typeof LocationsAustinRoute
   '/locations/denver': typeof LocationsDenverRoute
   '/locations/miami': typeof LocationsMiamiRoute
@@ -296,6 +322,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/industries/': typeof IndustriesIndexRoute
   '/dashboard/requests/new': typeof DashboardRequestsNewRoute
 }
 export interface FileRouteTypes {
@@ -317,6 +344,7 @@ export interface FileRouteTypes {
     | '/dashboard/creatives'
     | '/dashboard/projects'
     | '/dashboard/settings'
+    | '/industries/auto-detailing'
     | '/industries/dental'
     | '/industries/hvac'
     | '/industries/landscaping'
@@ -324,6 +352,7 @@ export interface FileRouteTypes {
     | '/industries/plumbing'
     | '/industries/real-estate'
     | '/industries/restaurant'
+    | '/industries/roofing'
     | '/locations/austin'
     | '/locations/denver'
     | '/locations/miami'
@@ -331,6 +360,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/dashboard/'
+    | '/industries/'
     | '/dashboard/requests/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -348,6 +378,7 @@ export interface FileRouteTypes {
     | '/dashboard/creatives'
     | '/dashboard/projects'
     | '/dashboard/settings'
+    | '/industries/auto-detailing'
     | '/industries/dental'
     | '/industries/hvac'
     | '/industries/landscaping'
@@ -355,6 +386,7 @@ export interface FileRouteTypes {
     | '/industries/plumbing'
     | '/industries/real-estate'
     | '/industries/restaurant'
+    | '/industries/roofing'
     | '/locations/austin'
     | '/locations/denver'
     | '/locations/miami'
@@ -362,6 +394,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/dashboard'
+    | '/industries'
     | '/dashboard/requests/new'
   id:
     | '__root__'
@@ -381,6 +414,7 @@ export interface FileRouteTypes {
     | '/dashboard/creatives'
     | '/dashboard/projects'
     | '/dashboard/settings'
+    | '/industries/auto-detailing'
     | '/industries/dental'
     | '/industries/hvac'
     | '/industries/landscaping'
@@ -388,6 +422,7 @@ export interface FileRouteTypes {
     | '/industries/plumbing'
     | '/industries/real-estate'
     | '/industries/restaurant'
+    | '/industries/roofing'
     | '/locations/austin'
     | '/locations/denver'
     | '/locations/miami'
@@ -395,6 +430,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/dashboard/'
+    | '/industries/'
     | '/dashboard/requests/new'
   fileRoutesById: FileRoutesById
 }
@@ -408,6 +444,7 @@ export interface RootRouteChildren {
   BlogHowAiChangingAdvertisingRoute: typeof BlogHowAiChangingAdvertisingRoute
   BlogTop5AdStrategiesHvacRoute: typeof BlogTop5AdStrategiesHvacRoute
   BlogWhyLocalBusinessesSwitchingToAiRoute: typeof BlogWhyLocalBusinessesSwitchingToAiRoute
+  IndustriesAutoDetailingRoute: typeof IndustriesAutoDetailingRoute
   IndustriesDentalRoute: typeof IndustriesDentalRoute
   IndustriesHvacRoute: typeof IndustriesHvacRoute
   IndustriesLandscapingRoute: typeof IndustriesLandscapingRoute
@@ -415,11 +452,13 @@ export interface RootRouteChildren {
   IndustriesPlumbingRoute: typeof IndustriesPlumbingRoute
   IndustriesRealEstateRoute: typeof IndustriesRealEstateRoute
   IndustriesRestaurantRoute: typeof IndustriesRestaurantRoute
+  IndustriesRoofingRoute: typeof IndustriesRoofingRoute
   LocationsAustinRoute: typeof LocationsAustinRoute
   LocationsDenverRoute: typeof LocationsDenverRoute
   LocationsMiamiRoute: typeof LocationsMiamiRoute
   LocationsPortlandRoute: typeof LocationsPortlandRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  IndustriesIndexRoute: typeof IndustriesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -443,6 +482,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/': {
+      id: '/industries/'
+      path: '/industries'
+      fullPath: '/industries/'
+      preLoaderRoute: typeof IndustriesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -494,6 +540,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsAustinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/industries/roofing': {
+      id: '/industries/roofing'
+      path: '/industries/roofing'
+      fullPath: '/industries/roofing'
+      preLoaderRoute: typeof IndustriesRoofingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/industries/restaurant': {
       id: '/industries/restaurant'
       path: '/industries/restaurant'
@@ -541,6 +594,13 @@ declare module '@tanstack/react-router' {
       path: '/industries/dental'
       fullPath: '/industries/dental'
       preLoaderRoute: typeof IndustriesDentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/auto-detailing': {
+      id: '/industries/auto-detailing'
+      path: '/industries/auto-detailing'
+      fullPath: '/industries/auto-detailing'
+      preLoaderRoute: typeof IndustriesAutoDetailingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/settings': {
@@ -693,6 +753,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogTop5AdStrategiesHvacRoute: BlogTop5AdStrategiesHvacRoute,
   BlogWhyLocalBusinessesSwitchingToAiRoute:
     BlogWhyLocalBusinessesSwitchingToAiRoute,
+  IndustriesAutoDetailingRoute: IndustriesAutoDetailingRoute,
   IndustriesDentalRoute: IndustriesDentalRoute,
   IndustriesHvacRoute: IndustriesHvacRoute,
   IndustriesLandscapingRoute: IndustriesLandscapingRoute,
@@ -700,11 +761,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndustriesPlumbingRoute: IndustriesPlumbingRoute,
   IndustriesRealEstateRoute: IndustriesRealEstateRoute,
   IndustriesRestaurantRoute: IndustriesRestaurantRoute,
+  IndustriesRoofingRoute: IndustriesRoofingRoute,
   LocationsAustinRoute: LocationsAustinRoute,
   LocationsDenverRoute: LocationsDenverRoute,
   LocationsMiamiRoute: LocationsMiamiRoute,
   LocationsPortlandRoute: LocationsPortlandRoute,
   BlogIndexRoute: BlogIndexRoute,
+  IndustriesIndexRoute: IndustriesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

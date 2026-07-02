@@ -25,17 +25,38 @@ function BlogPost2() {
       </nav>
 
       <main className="max-w-3xl mx-auto px-4 py-20">
-        <div className="mb-10 text-center">
-          <div className="flex items-center justify-center gap-4 mb-6 text-sm text-gray-500 uppercase tracking-widest font-semibold">
-            <span>June 28, 2026</span>
-            <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-            <span>Industry Strategy</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-8">
-            Top 5 Ad Strategies for HVAC Companies in 2026
-          </h1>
-          <div className="aspect-video bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-3xl flex items-center justify-center text-6xl mb-12 shadow-inner">
-            ❄️
+        <div className="mb-10">
+          <nav className="flex mb-8 text-sm font-medium text-gray-500 dark:text-gray-400" aria-label="Breadcrumb">
+            <ol className="inline-flex items-center space-x-1 md:space-x-3">
+              <li className="inline-flex items-center">
+                <Link to="/" className="hover:text-brand-500 transition-colors">Home</Link>
+              </li>
+              <li>
+                <div className="flex items-center">
+                  <svg className="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+                  <Link to="/blog" className="ml-1 hover:text-brand-500 transition-colors md:ml-2">Blog</Link>
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                  <svg className="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+                  <span className="ml-1 md:ml-2 text-gray-400 dark:text-gray-500 truncate max-w-[150px]">Top 5 Ad Strategies...</span>
+                </div>
+              </li>
+            </ol>
+          </nav>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-4 mb-6 text-sm text-gray-500 uppercase tracking-widest font-semibold">
+              <span>June 28, 2026</span>
+              <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+              <span>Industry Strategy</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-8">
+              Top 5 Ad Strategies for HVAC Companies in 2026
+            </h1>
+            <div className="aspect-video bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-3xl flex items-center justify-center text-6xl mb-12 shadow-inner">
+              ❄️
+            </div>
           </div>
         </div>
 

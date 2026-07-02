@@ -112,7 +112,19 @@ function Home() {
       <Testimonials />
 
       {/* ── Pricing ────────────────────────────────────────────────────────── */}
-      <Pricing onCta={() => scrollTo("contact")} />
+      <Pricing onCta={async () => {
+        try {
+          const res = await fetch("/api/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tier: "growth" }),
+          });
+          const data = await res.json();
+          if (data.url) window.location.href = data.url;
+        } catch {
+          scrollTo("contact");
+        }
+      }} />
 
       {/* ── FAQ ────────────────────────────────────────────────────────────── */}
       <Faq />
@@ -474,10 +486,13 @@ function AdExamples() {
   const industries = [
     { name: "HVAC", color: "from-cyan-500 to-blue-600", slug: "hvac" },
     { name: "Dental", color: "from-teal-500 to-emerald-600", slug: "dental" },
-    { name: "Restaurant", color: "from-orange-500 to-red-600" },
     { name: "Landscaping", color: "from-green-500 to-lime-600", slug: "landscaping" },
-    { name: "Med Spa", color: "from-pink-500 to-rose-600" },
-    { name: "Real Estate", color: "from-violet-500 to-purple-600" },
+    { name: "Plumbing", color: "from-blue-500 to-indigo-600", slug: "plumbing" },
+    { name: "Roofing", color: "from-orange-500 to-yellow-600", slug: "roofing" },
+    { name: "Med Spa", color: "from-pink-500 to-rose-600", slug: "med-spa" },
+    { name: "Real Estate", color: "from-violet-500 to-purple-600", slug: "real-estate" },
+    { name: "Restaurant", color: "from-orange-500 to-red-600", slug: "restaurant" },
+    { name: "Auto Detailing", color: "from-blue-600 to-cyan-500", slug: "auto-detailing" },
   ];
 
   return (
@@ -530,6 +545,16 @@ function AdExamples() {
               </div>
             </Link>
           ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <Link 
+            to="/industries" 
+            className="inline-flex items-center gap-2 text-brand-500 font-bold hover:text-brand-600 transition-colors"
+          >
+            View All Industries Served
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </Link>
         </div>
       </div>
     </section>
@@ -1004,11 +1029,31 @@ function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Connect to backend when available
-    alert("Thanks! We'll be in touch soon.");
-    setFormData({ name: "", email: "", business: "", message: "" });
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          business_name: formData.business,
+          message: formData.message,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to submit");
+      setSubmitted(true);
+      setFormData({ name: "", email: "", business: "", message: "" });
+    } catch {
+      alert("Something went wrong. Please try again or email us directly.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

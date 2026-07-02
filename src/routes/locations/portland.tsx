@@ -5,13 +5,55 @@ export const Route = createFileRoute("/locations/portland")({
   component: PortlandLocationPage,
 });
 
+function Breadcrumbs({ items }: { items: { label: string; to?: string }[] }) {
+  return (
+    <nav className="flex mb-8 text-sm font-medium text-gray-500 dark:text-gray-400" aria-label="Breadcrumb">
+      <ol className="inline-flex items-center space-x-1 md:space-x-3">
+        <li className="inline-flex items-center">
+          <Link to="/" className="hover:text-brand-500 transition-colors">Home</Link>
+        </li>
+        {items.map((item, i) => (
+          <li key={i}>
+            <div className="flex items-center">
+              <svg className="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+              {item.to ? (
+                <Link to={item.to} className="ml-1 hover:text-brand-500 transition-colors md:ml-2">{item.label}</Link>
+              ) : (
+                <span className="ml-1 md:ml-2 text-gray-400 dark:text-gray-500">{item.label}</span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 function PortlandLocationPage() {
   useEffect(() => {
     document.title = "AdSynth | Dental Practice Advertising in Portland, OR | AI Ad Creatives";
   }, []);
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Portland Dental Ad Creative Service",
+    "provider": {
+      "@type": "Organization",
+      "name": "AdSynth"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Portland"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <nav className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
@@ -29,6 +71,7 @@ function PortlandLocationPage() {
       <main>
         <header className="py-24 px-4 bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/20 dark:to-gray-950">
           <div className="max-w-4xl mx-auto text-center">
+            <Breadcrumbs items={[{ label: "Locations" }, { label: "Portland, OR" }]} />
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider mb-8">
               🌲 Local Service: Portland, OR
             </div>

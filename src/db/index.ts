@@ -365,3 +365,21 @@ export async function closeDb(): Promise<void> {
     _db = null;
   }
 }
+
+// ---------------------------------------------------------------------------
+// Dev mode: auto-create a demo user when Supabase isn't configured
+// ---------------------------------------------------------------------------
+
+const DEV_USER_ID = "dev-user-001";
+const DEV_USER_EMAIL = "demo@adsynth.app";
+const DEV_USER_NAME = "Jane Demo";
+
+export async function getOrCreateDevUser(): Promise<User> {
+  const existing = await getUserById(DEV_USER_ID);
+  if (existing) return existing;
+
+  const existingByEmail = await getUserByEmail(DEV_USER_EMAIL);
+  if (existingByEmail) return existingByEmail;
+
+  return createUser(DEV_USER_EMAIL, DEV_USER_NAME);
+}
