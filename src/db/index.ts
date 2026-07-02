@@ -11,7 +11,7 @@
  * NEVER import this in client components or hooks.
  */
 
-import { SCHEMA_SQL, type User, type CreativeRequest, type Project, type ContactMessage } from "./schema";
+import { SCHEMA_SQL, type User, type CreativeRequest, type Project, type ContactMessage, type Referral, type ReferralCredit, type FreePreview, type BrandSettings } from "./schema";
 
 // ---------------------------------------------------------------------------
 // Singleton DB connection
@@ -353,6 +353,202 @@ export async function getDashboardMetrics(): Promise<{
     thisMonthCreatives,
     mrr: mrr.mrr ?? 0,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Referral helpers
+// ---------------------------------------------------------------------------
+
+export async function createReferral(referrerId: string, referredEmail: string): Promise<Referral> {
+  const db = await getDb();
+  const stmt = db.prepare(
+    "INSERT INTO referrals (referrer_id, referred_email) VALUES ($referrer_id, $referred_email) RETURNING *"
+  );
+  return stmt.get({ $referrer_id: referrerId, $referred_email: referredEmail }) as Referral;
+}
+
+export async function getReferralsByReferrer(referrerId: string): Promise<Referral[]> {
+  const db = await getDb();
+  return db
+    .prepare("SELECT * FROM referrals WHERE referrer_id = ? ORDER BY created_at DESC")
+    .all(referrerId) as Referral[];
+}
+
+export async function getReferralByEmail(referredEmail: string): Promise<Referral | undefined> {
+  const db = await getDb();
+  return db.prepare("SELECT * FROM referrals WHERE referred_email = ?").get(referredEmail) as Referral | undefined;
+}
+
+export async function updateReferralStatus(id: string, status: Referral["status"]): Promise<Referral> {
+  const db = await getDb();
+  const stmt = db.prepare(
+    "UPDATE referrals SET status = ?, reward_granted = CASE WHEN ? = 'rewarded' THEN 1 ELSE reward_granted END WHERE id = ? RETURNING *"
+  );
+  return stmt.get(status, status, id) as Referral;
+}
+
+export async function grantReferralReward(id: string): Promise<Referral> {
+  return updateReferralStatus(id, "rewarded");
+}
+
+export async function getReferralStats(referrerId: string): Promise<{ total: number; pending: number; signedUp: number; subscribed: number; rewarded: number }> {
+  const db = await getDb();
+  const all = await getReferralsByReferrer(referrerId);
+  return {
+    total: all.length,
+    pending: all.filter((r) => r.status === "pending").length,
+    signedUp: all.filter((r) => r.status === "signed_up").length,
+    subscribed: all.filter((r) => r.status === "subscribed").length,
+    rewarded: all.filter((r) => r.status === "rewarded").length,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Referral credit helpers
+// ---------------------------------------------------------------------------
+
+export async function createReferralCredit(userId: string, amountCents: number, description: string): Promise<ReferralCredit> {
+  const db = await getDb();
+  const stmt = db.prepare(
+    "INSERT INTO referral_credits (user_id, amount_cents, description) VALUES ($user_id, $amount_cents, $description) RETURNING *"
+  );
+  return stmt.get({ $user_id: userId, $amount_cents: amountCents, $description: description }) as ReferralCredit;
+}
+
+export async function getReferralCreditsByUser(userId: string): Promise<ReferralCredit[]> {
+  const db = await getDb();
+  return db
+    .prepare("SELECT * FROM referral_credits WHERE user_id = ? AND used = 0 ORDER BY created_at DESC")
+    .all(userId) as ReferralCredit[];
+}
+
+export async function getTotalReferralCredits(userId: string): Promise<number> {
+  const db = await getDb();
+  const result = db
+    .prepare("SELECT COALESCE(SUM(amount_cents), 0) as total FROM referral_credits WHERE user_id = ? AND used = 0")
+    .get(userId) as { total: number };
+  return result.total;
+}
+
+export async function markReferralCreditsUsed(userId: string, amountCents: number): Promise<void> {
+  const db = await getDb();
+  const credits = await getReferralCreditsByUser(userId);
+  let remaining = amountCents;
+  for (const credit of credits) {
+    if (remaining <= 0) break;
+    const toUse = Math.min(credit.amount_cents, remaining);
+    db.run("UPDATE referral_credits SET used = 1 WHERE id = ?", [credit.id]);
+    remaining -= toUse;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Free preview helpers
+// ---------------------------------------------------------------------------
+
+export async function createFreePreview(data: {
+  email: string;
+  business_name: string;
+  industry: string;
+  target_audience?: string;
+  ad_platform?: string;
+}): Promise<FreePreview> {
+  const db = await getDb();
+  const stmt = db.prepare(`
+    INSERT INTO free_previews (email, business_name, industry, target_audience, ad_platform)
+    VALUES ($email, $business_name, $industry, $target_audience, $ad_platform)
+    RETURNING *
+  `);
+  return stmt.get({
+    $email: data.email,
+    $business_name: data.business_name,
+    $industry: data.industry,
+    $target_audience: data.target_audience ?? "",
+    $ad_platform: data.ad_platform ?? "facebook",
+  }) as FreePreview;
+}
+
+export async function updateFreePreviewCreative(id: string, creativeJson: string): Promise<FreePreview> {
+  const db = await getDb();
+  const stmt = db.prepare(
+    "UPDATE free_previews SET generated_creative = ? WHERE id = ? RETURNING *"
+  );
+  return stmt.get(creativeJson, id) as FreePreview;
+}
+
+export async function markFreePreviewSubscribed(id: string): Promise<FreePreview> {
+  const db = await getDb();
+  const stmt = db.prepare("UPDATE free_previews SET subscribed = 1 WHERE id = ? RETURNING *");
+  return stmt.get(id) as FreePreview;
+}
+
+export async function getFreePreviews(): Promise<FreePreview[]> {
+  const db = await getDb();
+  return db.prepare("SELECT * FROM free_previews ORDER BY created_at DESC").all() as FreePreview[];
+}
+
+// ---------------------------------------------------------------------------
+// Brand settings helpers
+// ---------------------------------------------------------------------------
+
+export async function upsertBrandSettings(data: {
+  user_id: string;
+  brand_colors?: string;
+  brand_tone?: string;
+  style_preferences?: string;
+  logo_url?: string;
+}): Promise<BrandSettings> {
+  const db = await getDb();
+  const existing = db.prepare("SELECT * FROM brand_settings WHERE user_id = ?").get(data.user_id) as BrandSettings | undefined;
+
+  if (existing) {
+    const stmt = db.prepare(`
+      UPDATE brand_settings SET
+        brand_colors = COALESCE($brand_colors, brand_colors),
+        brand_tone = COALESCE($brand_tone, brand_tone),
+        style_preferences = COALESCE($style_preferences, style_preferences),
+        logo_url = COALESCE($logo_url, logo_url),
+        updated_at = datetime('now')
+      WHERE user_id = $user_id RETURNING *
+    `);
+    return stmt.get({
+      $user_id: data.user_id,
+      $brand_colors: data.brand_colors ?? null,
+      $brand_tone: data.brand_tone ?? null,
+      $style_preferences: data.style_preferences ?? null,
+      $logo_url: data.logo_url ?? null,
+    }) as BrandSettings;
+  }
+
+  const stmt = db.prepare(`
+    INSERT INTO brand_settings (user_id, brand_colors, brand_tone, style_preferences, logo_url)
+    VALUES ($user_id, $brand_colors, $brand_tone, $style_preferences, $logo_url)
+    RETURNING *
+  `);
+  return stmt.get({
+    $user_id: data.user_id,
+    $brand_colors: data.brand_colors ?? "[]",
+    $brand_tone: data.brand_tone ?? "professional",
+    $style_preferences: data.style_preferences ?? "",
+    $logo_url: data.logo_url ?? "",
+  }) as BrandSettings;
+}
+
+export async function getBrandSettings(userId: string): Promise<BrandSettings | undefined> {
+  const db = await getDb();
+  return db.prepare("SELECT * FROM brand_settings WHERE user_id = ?").get(userId) as BrandSettings | undefined;
+}
+
+export async function checkUserHasBrandSettings(userId: string): Promise<boolean> {
+  const db = await getDb();
+  const result = db.prepare("SELECT COUNT(*) as c FROM brand_settings WHERE user_id = ?").get(userId) as { c: number };
+  return result.c > 0;
+}
+
+export async function checkUserHasProjects(userId: string): Promise<boolean> {
+  const db = await getDb();
+  const result = db.prepare("SELECT COUNT(*) as c FROM projects WHERE user_id = ?").get(userId) as { c: number };
+  return result.c > 0;
 }
 
 // ---------------------------------------------------------------------------
