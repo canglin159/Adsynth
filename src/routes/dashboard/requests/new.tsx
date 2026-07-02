@@ -1,11 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { createRequest, listProjects } from "~/lib/api";
+import { createRequest, listProjects, getCurrentUserId } from "~/lib/api";
 import { useState } from "react";
 
 export const Route = createFileRoute("/dashboard/requests/new")({
   loader: async () => {
-    const projects = await listProjects({ data: "test-user-id" });
-    return { projects };
+    const user = await getCurrentUserId();
+    const userId = user!.id;
+    const projects = await listProjects({ data: userId });
+    return { projects, userId };
   },
   component: NewRequestPage,
 });
@@ -29,7 +31,7 @@ const AD_TYPES = [
 ];
 
 function NewRequestPage() {
-  const { projects } = Route.useLoaderData();
+  const { projects, userId } = Route.useLoaderData();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     business_type: "",
@@ -53,7 +55,7 @@ function NewRequestPage() {
     try {
       await createRequest({
         data: {
-          user_id: "test-user-id",
+          user_id: userId,
           business_type: form.business_type,
           business_name: form.business_name,
           ad_platform: form.ad_platform as "facebook" | "instagram" | "google",

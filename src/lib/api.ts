@@ -44,6 +44,52 @@ export const getCurrentUserFromDb = createServerFn({ method: "GET" })
     return user ?? null;
   });
 
+/**
+ * Get the currently authenticated user ID.
+ * When Supabase is configured, uses the Supabase session.
+ * In dev mode (no Supabase), auto-creates a demo user.
+ */
+export const getCurrentUserId = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const { SUPABASE_URL } = await import("./env");
+
+    if (SUPABASE_URL) {
+      // Supabase configured — use session
+      const { getCurrentUser } = await import("./auth");
+      const user = await getCurrentUser();
+      if (user) return { id: user.id, email: user.email, name: user.name };
+      return null;
+    }
+
+    // Dev mode — use our local demo user
+    const devUser = await getOrCreateDevUser();
+    return {
+      id: devUser.id,
+      email: devUser.email,
+      name: devUser.name,
+    };
+  });
+
+/**
+ * Handle Stripe checkout success — link stripe customer to user.
+ * Called after redirect from Stripe checkout.
+ */
+export const handleCheckoutSuccess = createServerFn({ method: "POST" })
+  .validator(
+    (data: {
+      userId: string;
+      stripeCustomerId: string;
+      tier: "starter" | "growth" | "agency";
+    }) => data
+  )
+  .handler(async (ctx) => {
+    return updateUserSubscription(
+      ctx.data.userId,
+      ctx.data.tier,
+      ctx.data.stripeCustomerId
+    );
+  });
+
 // ---------------------------------------------------------------------------
 // Creative Requests
 // ---------------------------------------------------------------------------

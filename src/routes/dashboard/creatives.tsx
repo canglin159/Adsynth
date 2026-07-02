@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { listRequests } from "~/lib/api";
+import { listRequests, getCurrentUserId } from "~/lib/api";
 import { Palette, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard/creatives")({
   loader: async () => {
-    return listRequests({ data: "test-user-id" });
+    const user = await getCurrentUserId();
+    return listRequests({ data: user!.id });
   },
   component: CreativesPage,
 });

@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { listProjects } from "~/lib/api";
+import { listProjects, getCurrentUserId } from "~/lib/api";
 import { FolderKanban, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard/projects")({
   loader: async () => {
-    return listProjects({ data: "test-user-id" });
+    const user = await getCurrentUserId();
+    return listProjects({ data: user!.id });
   },
   component: ProjectsPage,
 });

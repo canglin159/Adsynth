@@ -1,33 +1,70 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/industries/auto-detailing")({
   component: AutoDetailingIndustryPage,
 });
 
+function Breadcrumbs({ items }: { items: { label: string; to?: string }[] }) {
+  return (
+    <nav className="flex mb-8 text-sm font-medium text-gray-500 dark:text-gray-400" aria-label="Breadcrumb">
+      <ol className="inline-flex items-center space-x-1 md:space-x-3">
+        <li className="inline-flex items-center">
+          <Link to="/" className="hover:text-brand-500 transition-colors">Home</Link>
+        </li>
+        {items.map((item, i) => (
+          <li key={i}>
+            <div className="flex items-center">
+              <svg className="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+              {item.to ? (
+                <Link to={item.to} className="ml-1 hover:text-brand-500 transition-colors md:ml-2">{item.label}</Link>
+              ) : (
+                <span className="ml-1 md:ml-2 text-gray-400 dark:text-gray-500">{item.label}</span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 function AutoDetailingIndustryPage() {
   useEffect(() => {
     document.title = "AdSynth | AI Ad Creatives for Auto Detailing & Ceramic Coating";
   }, []);
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Auto Detailing AI Ad Creative Service",
+    "description": "High-impact ad creatives for auto detailing and ceramic coating businesses.",
+    "provider": {
+      "@type": "Organization",
+      "name": "AdSynth"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
-      {/* Navbar Placeholder */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <nav className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-purple-500 text-sm text-white">
               A
             </span>
             <span>AdSynth</span>
-          </a>
+          </Link>
           <a href="/#pricing" className="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
             Get Started
           </a>
         </div>
       </nav>
 
-      {/* Hero Section */}
       <header className="py-16 md:py-24 px-4 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/10 blur-[100px] rounded-full" />
@@ -35,6 +72,7 @@ function AutoDetailingIndustryPage() {
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
+          <Breadcrumbs items={[{ label: "Industries", to: "/industries" }, { label: "Auto Detailing" }]} />
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-left">
               <span className="inline-block px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider mb-6">
@@ -47,9 +85,9 @@ function AutoDetailingIndustryPage() {
                 High-end ceramic coating, paint correction, and interior restoration. AdSynth creates stunning visuals that reflect your shop's quality and precision.
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-4">
-                <a href="/#pricing" className="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-brand-500/20 transition-all text-center">
+                <Link to="/#pricing" className="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-brand-500/20 transition-all text-center">
                   Get Your Ad Creatives
-                </a>
+                </Link>
                 <a href="#examples" className="w-full sm:w-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 px-8 py-4 rounded-xl font-bold text-lg transition-all text-center">
                   See Detailing Ads
                 </a>
@@ -57,14 +95,11 @@ function AutoDetailingIndustryPage() {
             </div>
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-800 transform lg:-rotate-2 hover:rotate-0 transition-transform duration-500">
-                <img 
-                  src="/images/auto-detailing-hero.png" 
-                  alt="Car Detailing Professional" 
-                  className="w-full h-auto object-cover aspect-square md:aspect-video lg:aspect-square"
-                />
+                 <div className="w-full h-auto bg-gray-200 dark:bg-gray-800 aspect-square md:aspect-video lg:aspect-square flex items-center justify-center text-4xl">
+                   🏎️
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
               </div>
-              {/* Floating Badge */}
               <div className="absolute -top-6 -right-6 bg-white dark:bg-gray-900 p-4 rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 hidden sm:block">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white">
@@ -81,7 +116,6 @@ function AutoDetailingIndustryPage() {
         </div>
       </header>
 
-      {/* Benefits Grid */}
       <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
@@ -116,7 +150,6 @@ function AutoDetailingIndustryPage() {
         </div>
       </section>
 
-      {/* Examples Section */}
       <section id="examples" className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -144,18 +177,16 @@ function AutoDetailingIndustryPage() {
         </div>
       </section>
 
-      {/* CTA Footer */}
       <section className="py-20 bg-blue-600 text-white text-center px-4">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white leading-tight">Ready to book more premium details?</h2>
           <p className="text-xl mb-10 opacity-90 text-white">Join 200+ auto detailing shops who use AdSynth to deliver world-class ad creatives.</p>
-          <a href="/#pricing" className="inline-block bg-white text-blue-600 px-10 py-4 rounded-xl font-bold text-xl hover:bg-gray-100 transition-colors shadow-xl">
+          <Link to="/#pricing" className="inline-block bg-white text-blue-600 px-10 py-4 rounded-xl font-bold text-xl hover:bg-gray-100 transition-colors shadow-xl">
             Get Started Now
-          </a>
+          </Link>
         </div>
       </section>
 
-      {/* Minimal Footer */}
       <footer className="py-12 border-t border-gray-200 dark:border-gray-800 text-center text-gray-500 text-sm">
         <p>&copy; {new Date().getFullYear()} AdSynth. All rights reserved.</p>
       </footer>

@@ -1,25 +1,64 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/industries/real-estate")({
   component: RealEstateIndustryPage,
 });
 
+function Breadcrumbs({ items }: { items: { label: string; to?: string }[] }) {
+  return (
+    <nav className="flex mb-8 text-sm font-medium text-gray-500 dark:text-gray-400" aria-label="Breadcrumb">
+      <ol className="inline-flex items-center space-x-1 md:space-x-3">
+        <li className="inline-flex items-center">
+          <Link to="/" className="hover:text-brand-500 transition-colors">Home</Link>
+        </li>
+        {items.map((item, i) => (
+          <li key={i}>
+            <div className="flex items-center">
+              <svg className="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+              {item.to ? (
+                <Link to={item.to} className="ml-1 hover:text-brand-500 transition-colors md:ml-2">{item.label}</Link>
+              ) : (
+                <span className="ml-1 md:ml-2 text-gray-400 dark:text-gray-500">{item.label}</span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 function RealEstateIndustryPage() {
   useEffect(() => {
     document.title = "AdSynth | AI Ad Creatives for Real Estate Agents";
   }, []);
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Real Estate AI Ad Creative Service",
+    "description": "High-performing ad creatives for real estate listings and lead generation.",
+    "provider": {
+      "@type": "Organization",
+      "name": "AdSynth"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <nav className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-purple-500 text-sm text-white">
               A
             </span>
             <span>AdSynth</span>
-          </a>
+          </Link>
           <a href="/#pricing" className="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
             Get Started
           </a>
@@ -28,50 +67,38 @@ function RealEstateIndustryPage() {
 
       <header className="py-16 md:py-24 px-4 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 blur-[100px] rounded-full" />
-          <div className="bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 blur-[100px] rounded-full" />
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-violet-500/10 blur-[100px] rounded-full" />
+          <div className="bottom-0 left-1/4 w-96 h-96 bg-purple-500/10 blur-[100px] rounded-full" />
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
+          <Breadcrumbs items={[{ label: "Industries", to: "/industries" }, { label: "Real Estate" }]} />
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-left">
-              <span className="inline-block px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider mb-6">
-                Real Estate Marketing Solutions
+              <span className="inline-block px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-xs font-bold uppercase tracking-wider mb-6">
+                Real Estate Marketing
               </span>
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-tight">
-                Win More Listings with <span className="text-blue-600">Stunning Property Ads</span>
+                Move Properties Faster with <span className="text-violet-600">AI-Powered Ads</span>
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-xl">
-                Elevate your real estate brand. From "Just Listed" alerts to seller valuation campaigns, AdSynth generates high-end visuals that capture attention and build trust.
+                Stunning listing promotions and lead gen campaigns for modern realtors. Stand out in the feed and capture more seller leads.
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-4">
-                <a href="/#pricing" className="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-brand-500/20 transition-all text-center">
-                  Start Listing More
-                </a>
+                <Link to="/#pricing" className="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-brand-500/20 transition-all text-center">
+                  Boost Your Listings
+                </Link>
                 <a href="#examples" className="w-full sm:w-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 px-8 py-4 rounded-xl font-bold text-lg transition-all text-center">
-                  View Property Ads
+                  View Examples
                 </a>
               </div>
             </div>
             <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-800 transform lg:rotate-2 hover:rotate-0 transition-transform duration-500">
-                <img 
-                  src="/images/real-estate-hero.png" 
-                  alt="Luxury Real Estate Listing" 
-                  className="w-full h-auto object-cover aspect-square md:aspect-video lg:aspect-square"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-              </div>
-              <div className="absolute -bottom-6 -left-6 bg-white dark:bg-gray-900 p-4 rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 hidden sm:block">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Market Dominance</p>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white">Top 1% Visuals</p>
-                  </div>
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-800 transform lg:-rotate-2 hover:rotate-0 transition-transform duration-500">
+                <div className="w-full h-auto bg-gray-200 dark:bg-gray-800 aspect-square md:aspect-video lg:aspect-square flex items-center justify-center text-4xl">
+                   🏘️
                 </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
               </div>
             </div>
           </div>
@@ -82,70 +109,27 @@ function RealEstateIndustryPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950 text-blue-500 rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
+              <div className="w-12 h-12 bg-violet-50 dark:bg-violet-950 text-violet-500 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Listing Notifications</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Instantly generate "Just Listed" and "Under Contract" creatives that build momentum and authority.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-              <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-950 text-indigo-500 rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Seller Valuation Leads</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Conversion-optimized copy designed to drive homeowners to your valuation tools and book listing appointments.
-              </p>
+              <h3 className="text-xl font-bold mb-3">Listing Showcases</h3>
+              <p className="text-gray-600 dark:text-gray-400">Dynamic templates that make every property look like a dream home.</p>
             </div>
             <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
               <div className="w-12 h-12 bg-purple-50 dark:bg-purple-950 text-purple-500 rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Personal Branding</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                AI-suggested marketing angles that highlight your local expertise, sales record, and client testimonials.
-              </p>
+              <h3 className="text-xl font-bold mb-3">Seller Lead Gen</h3>
+              <p className="text-gray-600 dark:text-gray-400">Campaigns designed to attract homeowners looking for a valuation.</p>
+            </div>
+            <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+              <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-950 text-indigo-500 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              </div>
+              <h3 className="text-xl font-bold mb-3">Open House Ads</h3>
+              <p className="text-gray-600 dark:text-gray-400">Rapid turnaround for weekend events to drive maximum foot traffic.</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section id="examples" className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Real Estate Ad Examples</h2>
-            <p className="text-gray-600 dark:text-gray-400">Winning creatives for Facebook and Instagram.</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {["Just Listed", "Home Valuation", "Client Success"].map((name, i) => (
-              <div key={i} className="aspect-[4/5] bg-gray-100 dark:bg-gray-900 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-800 group hover:border-blue-500 transition-colors overflow-hidden">
-                <div className="text-center p-6 w-full h-full flex flex-col items-center justify-center bg-white dark:bg-gray-900 group-hover:bg-blue-50/10 transition-colors">
-                  <div className="w-16 h-16 bg-blue-50 dark:bg-blue-950 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform">
-                    <span className="text-2xl font-bold text-blue-500">🏠</span>
-                  </div>
-                  <p className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{name} Ad</p>
-                  <p className="text-sm text-gray-500 mb-4">Optimized for Facebook Feed</p>
-                  <div className="space-y-2 text-left bg-blue-50 dark:bg-gray-800 p-4 rounded-lg text-xs w-full max-w-[200px]">
-                    <div className="h-2 w-3/4 bg-blue-100 dark:bg-blue-700 rounded" />
-                    <div className="h-2 w-full bg-blue-100 dark:bg-blue-700 rounded" />
-                    <div className="h-2 w-1/2 bg-blue-100 dark:bg-blue-700 rounded" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-blue-600 text-white text-center px-4">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white leading-tight">Ready to dominate your local market?</h2>
-          <p className="text-xl mb-10 opacity-90 text-white">Join 150+ real estate professionals who use AdSynth to automate their marketing creative.</p>
-          <a href="/#pricing" className="inline-block bg-white text-blue-600 px-10 py-4 rounded-xl font-bold text-xl hover:bg-gray-100 transition-colors shadow-xl">
-            Get Started Now
-          </a>
         </div>
       </section>
 

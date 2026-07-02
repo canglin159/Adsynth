@@ -1,25 +1,64 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/industries/med-spa")({
   component: MedSpaIndustryPage,
 });
 
+function Breadcrumbs({ items }: { items: { label: string; to?: string }[] }) {
+  return (
+    <nav className="flex mb-8 text-sm font-medium text-gray-500 dark:text-gray-400" aria-label="Breadcrumb">
+      <ol className="inline-flex items-center space-x-1 md:space-x-3">
+        <li className="inline-flex items-center">
+          <Link to="/" className="hover:text-brand-500 transition-colors">Home</Link>
+        </li>
+        {items.map((item, i) => (
+          <li key={i}>
+            <div className="flex items-center">
+              <svg className="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+              {item.to ? (
+                <Link to={item.to} className="ml-1 hover:text-brand-500 transition-colors md:ml-2">{item.label}</Link>
+              ) : (
+                <span className="ml-1 md:ml-2 text-gray-400 dark:text-gray-500">{item.label}</span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 function MedSpaIndustryPage() {
   useEffect(() => {
     document.title = "AdSynth | AI Ad Creatives for Med Spas";
   }, []);
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Med Spa AI Ad Creative Service",
+    "description": "High-end ad creatives for med spas and aesthetics clinics.",
+    "provider": {
+      "@type": "Organization",
+      "name": "AdSynth"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <nav className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-purple-500 text-sm text-white">
               A
             </span>
             <span>AdSynth</span>
-          </a>
+          </Link>
           <a href="/#pricing" className="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
             Get Started
           </a>
@@ -33,6 +72,7 @@ function MedSpaIndustryPage() {
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
+          <Breadcrumbs items={[{ label: "Industries", to: "/industries" }, { label: "Med Spa" }]} />
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-left order-2 lg:order-1">
               <span className="inline-block px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 text-xs font-bold uppercase tracking-wider mb-6">
@@ -45,9 +85,9 @@ function MedSpaIndustryPage() {
                 Elevate your clinic's brand with high-end ad creatives. From Botox specials to laser hair removal, we generate the visuals that attract high-value clients.
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-4">
-                <a href="/#pricing" className="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-brand-500/20 transition-all text-center">
+                <Link to="/#pricing" className="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-brand-500/20 transition-all text-center">
                   Scale Your Bookings
-                </a>
+                </Link>
                 <a href="#examples" className="w-full sm:w-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 px-8 py-4 rounded-xl font-bold text-lg transition-all text-center">
                   View Examples
                 </a>
@@ -55,11 +95,9 @@ function MedSpaIndustryPage() {
             </div>
             <div className="relative order-1 lg:order-2">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-800 transform lg:rotate-2 hover:rotate-0 transition-transform duration-500">
-                <img 
-                  src="/images/med-spa-hero.png" 
-                  alt="Luxury Med Spa Treatment" 
-                  className="w-full h-auto object-cover aspect-square md:aspect-video lg:aspect-square"
-                />
+                <div className="w-full h-auto bg-gray-200 dark:bg-gray-800 aspect-square md:aspect-video lg:aspect-square flex items-center justify-center text-4xl">
+                   ✨
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
               </div>
               <div className="absolute -bottom-6 -right-6 bg-white dark:bg-gray-900 p-4 rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 hidden sm:block">
@@ -143,9 +181,9 @@ function MedSpaIndustryPage() {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white leading-tight">Ready to elevate your Med Spa?</h2>
           <p className="text-xl mb-10 opacity-90 text-white">Join 50+ elite aesthetic clinics that use AdSynth to automate their creative workflow.</p>
-          <a href="/#pricing" className="inline-block bg-white text-rose-500 px-10 py-4 rounded-xl font-bold text-xl hover:bg-gray-100 transition-colors shadow-xl">
+          <Link to="/#pricing" className="inline-block bg-white text-rose-500 px-10 py-4 rounded-xl font-bold text-xl hover:bg-gray-100 transition-colors shadow-xl">
             Get Started Now
-          </a>
+          </Link>
         </div>
       </section>
 

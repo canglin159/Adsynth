@@ -1138,12 +1138,22 @@ function Contact() {
               placeholder="Tell us about your advertising needs..."
             />
           </div>
+          {submitted ? (
+            <div className="rounded-xl bg-green-50 px-6 py-4 text-center text-green-700 dark:bg-green-950 dark:text-green-300">
+              <svg className="mx-auto mb-2 h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+              <p className="font-semibold">Thanks! We'll be in touch soon.</p>
+            </div>
+          ) : (
           <button
             type="submit"
-            className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-purple-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
+            disabled={submitting}
+            className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-purple-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30 disabled:opacity-60"
           >
-            Send Message
+            {submitting ? "Sending..." : "Send Message"}
           </button>
+          )}
         </form>
       </div>
     </section>

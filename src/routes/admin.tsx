@@ -1,9 +1,11 @@
 /**
  * Admin Layout — sidebar navigation + auth guard
+ *
+ * Uses the reusable requireAdmin() guard for auth.
+ * Single route definition (was previously duplicated — fixed).
  */
 
 import { createFileRoute, Outlet, Link, useLocation } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
 import {
   LayoutDashboard,
   Users,
@@ -13,13 +15,14 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
+import { requireAdmin } from "~/lib/router-guard";
 
-// Server-side auth guard
-const checkAdmin = createServerFn({ method: "GET" }).handler(async () => {
-  // For MVP: simple check. In production, use Supabase session.
-  // The admin is authenticated via the app's auth system.
-  // For now, we allow access and let the UI handle it.
-  return { authorized: true };
+export const Route = createFileRoute("/admin")({
+  component: AdminLayout,
+  beforeLoad: async () => {
+    const ctx = await requireAdmin();
+    return { adminEmail: ctx.userEmail };
+  },
 });
 
 const NAV_ITEMS = [
@@ -29,22 +32,6 @@ const NAV_ITEMS = [
   { href: "/admin/subscriptions", label: "Subscriptions", icon: CreditCard },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
-
-export const Route = createFileRoute("/admin")({
-  loader: () => checkAdmin(),
-  component: AdminLayout,
-  notFoundComponent: () => (
-    <div className="flex items-center justify-center p-12">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold">Page not found</h2>
-        <p className="mt-2 text-gray-500">This admin page doesn't exist.</p>
-        <Link to="/admin" className="mt-4 inline-block text-brand-500 hover:underline">
-          Back to Dashboard
-        </Link>
-      </div>
-    </div>
-  ),
-});
 
 function AdminLayout() {
   const location = useLocation();

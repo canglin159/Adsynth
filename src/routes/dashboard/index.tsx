@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { listProjects, listRequests, adminGetSummary } from "~/lib/api";
+import { listProjects, listRequests, adminGetSummary, getCurrentUserId } from "~/lib/api";
 
 export const Route = createFileRoute("/dashboard/")({
   loader: async () => {
-    const userId = "test-user-id";
+    const user = await getCurrentUserId();
+    const userId = user!.id;
     const [summary, requests, projects] = await Promise.all([
       adminGetSummary(),
       listRequests({ data: userId }),
